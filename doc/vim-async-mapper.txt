@@ -1,0 +1,214 @@
+*vim-async-mapper.txt*	Distraction-free insert maps.	2024 Dec 09
+
+VIM ASYNC MAPPER: Add non-blocking insert mode maps.~
+
+VIM ASYNC MAPPER				*vim-async-mapper*
+
+1. About This Plugin				|vim-async-mapper-about|
+2. Fork Improvements				|vim-async-mapper-fork|
+3. Details					|vim-async-mapper-details|
+4. Example #1 — Use `jk`/`kj` to `<ESC>`	|vim-async-mapper-example-1|
+5. Example #2 — Use `gf` in insert mode		|vim-async-mapper-example-2|
+6. Disable plugin for specific file types	|vim-async-mapper-disable|
+7. Requirements — Python 3 (Optional)		|vim-async-mapper-requirements|
+8. Related projects				|vim-async-mapper-related|
+
+==============================================================================
+1. About This Plugin				*vim-async-mapper-about*
+
+Use `vim-async-mapper` to add non-blocking insert mode maps
+using "regular" characters.
+
+- Instead of using a <Leader> combination or modifiers (e.g., <Ctrl>)
+  to wire insert mode maps, you can wire normal character sequences
+  (such as |gf|) without disrupting the normal user experience.
+
+Project page: https://github.com/embrace-vim/vim-async-mapper
+
+==============================================================================
+2. Fork Improvements				*vim-async-mapper-fork*
+
+This project forks `vim-easyescape` https://github.com/zhou13/vim-easyescape
+and makes the following changes:
+
+- Supports multiple sequences for arbitrary commands.
+
+  - `vim-easyescape` only supports one key sequence — and it adds all
+    permutations of it, e.g., if you map |kj|, then |jk| will also work.
+
+  - `vim-easyescape` only supports one map command, <ESC>.
+
+  - This fork, in contrast, supports more than one key sequence, and it
+    does not wire any any permutations unless you want them.
+
+  - This fork supports any map command you want to run, e.g., |gf|.
+
+  - This forks supports both insert mode and normal mode maps.
+
+- Avoids editing the buffer.
+
+  - After typing the key sequence, `vim-easyescape` uses <Backspace>
+    to remove what you typed, but this leaves the buffer edited.
+
+    - And then you have to |:undo| or save, or you'll be prompted
+      when you try to close the file.
+
+  - This plugin uses |:undo| when possible to clear the typed
+    sequence, so that the file buffer remains unchanged.
+
+==============================================================================
+3. Details					*vim-async-mapper-details*
+
+`vim-async-mapper` lets you add nondisruptive insert mode maps.
+
+- A normal, naïve insert map pauses input between keypresses, e.g.,
+  if you wanted to be able to use |gf| to open file paths from
+  insert mode, you could add a basic |imap|, e.g., >
+
+    inoremap gf <C-O>gf
+<
+  But this will degrade your user experience — now when you type
+  a `g`, instead of inserting the character, Vim will show a `g`
+  over the next character, and it won't insert the `g` until a
+  timeout, or until you hit a character other than `f`.
+
+  - E.g., assume the cursor is before 's' on the following line: >
+
+    this is some text
+            ↑ cursor
+<
+    When you press `g`, you'll see this: >
+
+    this is gome text
+            ↑ cursor
+<
+    And not until a timeout occurs, or until you press another key
+    (other than `f`) will the insert happen.
+
+    And you'll finally see, e.g., >
+
+    this is gsome text
+             ↑ cursor
+<
+- So instead of adding multiple-character mappings, `vim-async-mapper`
+  adds single-character mappings and then monitors input to see if it
+  matches any sequence that you've registered with it.
+
+  - Considering the previous example, if you wanted to add a |gf|
+    mapping, this plugin will monitor `g` and `f` separately
+    (by creating two maps, `inoremap g` and `inoremap f`).
+
+    Then, when it sees a `g`, it'll remember this, and if the next
+    keypress is an `f`, it sees that you've typed a sequence, and it
+    will run the command you've registered for that sequence.
+
+==============================================================================
+4. Example #1 — Use `jk`/`kj` to `<ESC>`	*vim-async-mapper-example-1*
+
+Common usage — map insert mode |jk| and |kj| to <ESC>
+
+The most common use case is to replace `vim-easyescape`: >
+
+  let g:vim_async_mapper_timeout = 100
+
+  call g:embrace#amapper#register_insert_mode_map("kj", "\<ESC>")
+  call g:embrace#amapper#register_insert_mode_map("jk", "\<ESC>")
+<
+If you also wanted |kj| and |jk| to work from command mode,
+you could add two simple maps: >
+
+  cnoremap kj <ESC>
+  cnoremap jk <ESC>
+<
+Taking it even further, you could also add the same maps to normal
+mode to toggle _back_ to insert mode, and it won't interfere with
+the built-in `j` or `k` commands, e.g., >
+
+  call g:embrace#amapper#register_normal_mode_map("kj", "ji")
+  call g:embrace#amapper#register_normal_mode_map("jk", "ki")
+<
+- So if you type |kj|, the `k` moves the cursor up one row, and
+  the `j` triggers the map command. And then the map command
+  runs `j` to move the cursor back down one row (to restore its
+  position), and then `i` to enter insert mode.
+
+- You can see a real-world implementation in:
+  https://github.com/landonb/vim-ovm-easyescape-kj-jk/blob/release/plugin/vim_ovm_easyescape_kj_jk.vim
+
+==============================================================================
+5. Example #2 — Use `gf` in insert mode		*vim-async-mapper-example-2*
+
+The |gf| command is very useful, especially if you bop around source code
+and note files a lot and leave yourself file path references in comments
+or in your notes.
+
+But after a while, you might grow tired of needing to leave insert
+mode to run |gf|! One idea is to map insert mode |gf| to running
+the normal mode command of the same name, e.g., >
+
+  let g:vim_async_mapper_timeout = 100
+
+  " Wire the `gf` key sequence to the `gf` command.
+  call g:embrace#amapper#register_insert_mode_map("gf", "gf")
+<
+You could similarly add a visual mode mapping: >
+
+  " [y]ank selected text to `"` register, then paste `"` contents as arg to :edit.
+  vnoremap gf y:edit <C-r>"<CR>
+<
+- You can see a real-world implementation in
+  https://github.com/embrace-vim/vim-goto-file-sh/blob/release/plugin/includeexpr-for-gf.vim
+
+==============================================================================
+6. Disable plugin for specific file types	*vim-async-mapper-disable*
+
+You can disable `vim-async-mapper` for specific file types (or for any
+buffer) by setting `b:vim_async_mapper_disable = 1`, e.g.: >
+
+  autocmd FileType text,markdown call setbufvar(bufnr("%"), 'vim_async_mapper_disable', 1)
+<
+- This applies to all registered mappings, however. (Feel free to PR if
+  you want to make it more discerning, i.e., to disable individual key
+  sequences instead of it being all-or-nothing.)
+
+==============================================================================
+7. Requirements — Python 3 (Optional)		*vim-async-mapper-requirements*
+
+Python3 is required to set a timeout less than 2000 msec., e.g., >
+
+    let g:vim_async_mapper_timeout = 100
+<
+Otherwise the shortest usable timeout will be 2 secs.
+
+- If more than timeout time passes between keypresses, the current
+  key sequence is ignored.
+
+  - E.g., if you `g` and then briefly pause before typing `f`, you
+    can avoid running the |gf| command.
+
+    - Though not that |gf| is a very common substring in English — there
+      are only about 19 words that contain it, including "dogface" (older
+      slang for a WW II infantryman), "eggfruit", "pigfish", "songful",
+      "slugfest", and probably the most commonly used match, "meaningful".
+      (Thanks to https://www.visca.com/regexdict/ for help with research.)
+
+Hints:
+
+- On macOS, ensure MacVim installed and its `vim`/`vi` are on `PATH` before Apple's.
+
+- On Linux, build Vim with Python3 support.
+
+  - Here's how DepoXy project builds Vim:
+
+    https://github.com/DepoXy/depoxy/blob/1.4.0/home/.vim/_mrconfig#L53-L108
+
+==============================================================================
+8. Related projects			*vim-async-mapper-related*
+
+This project owes a debt of gratitude to `vim-easyescape`!
+
+- "vim-easyescape makes exiting insert mode easy and distraction free!"
+
+  https://github.com/zhou13/vim-easyescape
+
+ vim:tw=78:ts=8:ft=help:norl:
