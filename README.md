@@ -99,10 +99,10 @@ and makes the following changes:
 The most common use case is to replace `vim-easyescape`:
 
   ```
-  let g:vim_async_mapper_timeout = 100
+  let timeout_msec = 100
 
-  call g:embrace#amapper#register_insert_mode_map("kj", "\<ESC>")
-  call g:embrace#amapper#register_insert_mode_map("jk", "\<ESC>")
+  call g:embrace#amapper#register_insert_mode_map("kj", "\<ESC>", timeout_msec)
+  call g:embrace#amapper#register_insert_mode_map("jk", "\<ESC>", timeout_msec)
   ```
 
 If you also wanted `kj` and `jk` to work from command mode,
@@ -118,8 +118,10 @@ mode to toggle *back* to insert mode, and it won't interfere with
 the built-in `j` or `k` commands, e.g.,
 
   ```
-  call g:embrace#amapper#register_normal_mode_map("kj", "ji")
-  call g:embrace#amapper#register_normal_mode_map("jk", "ki")
+  let timeout_msec = 100
+
+  call g:embrace#amapper#register_normal_mode_map("kj", "ji", timeout_msec)
+  call g:embrace#amapper#register_normal_mode_map("jk", "ki", timeout_msec)
   ```
 
 - So if you type `kj`, the `k` moves the cursor up one row, and
@@ -160,10 +162,10 @@ mode to run `gf`! One idea is to map insert mode `gf` to running
 the normal mode command of the same name, e.g.,
 
   ```
-  let g:vim_async_mapper_timeout = 100
+  let timeout_msec = 100
 
   " Wire the `gf` key sequence to the `gf` command.
-  call g:embrace#amapper#register_insert_mode_map("gf", "gf")
+  call g:embrace#amapper#register_insert_mode_map("gf", "gf", timeout_msec)
   ```
 
 You could similarly add a visual mode mapping:
@@ -177,6 +179,31 @@ You could similarly add a visual mode mapping:
 
 (You can see a real-world implementation in
 [https://github.com/embrace-vim/vim-goto-file-sh/blob/release/plugin/includeexpr-for-gf.vim][includeexpr-for-gf].)
+
+## Timeout values
+
+You can set a different timeout for each sequence, as shown in the
+examples above.
+
+If you omit the timeout, it defaults to the value of a global variable,
+`g:vim_async_mapper_timeout`, which defaults to 100 unless you change it,
+e.g.,
+
+  ```
+  let g:vim_async_mapper_timeout = 100
+  ```
+
+Such a short timeout works well for the examples shown above, but you
+may need a longer timeout for other maps.
+
+- For instance, if you mix case, you might find that you need a longer
+  timeout, e.g.,
+
+  ```
+  let timeout_msec = 200
+
+  call g:embrace#amapper#register_insert_mode_map("gW", "gW", timeout_msec)
+  ```
 
 ## Disable plugin for specific file types
 

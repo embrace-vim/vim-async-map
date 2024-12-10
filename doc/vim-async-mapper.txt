@@ -9,9 +9,10 @@ VIM ASYNC MAPPER				*vim-async-mapper*
 3. Details					|vim-async-mapper-details|
 4. Example #1 — Use `jk`/`kj` to `<ESC>`	|vim-async-mapper-example-1|
 5. Example #2 — Use `gf` in insert mode		|vim-async-mapper-example-2|
-6. Disable plugin for specific file types	|vim-async-mapper-disable|
-7. Requirements — Python 3 (Optional)		|vim-async-mapper-requirements|
-8. Related projects				|vim-async-mapper-related|
+6. Timeout values				|vim-async-mapper-timeout|
+7. Disable plugin for specific file types	|vim-async-mapper-disable|
+8. Requirements — Python 3 (Optional)		|vim-async-mapper-requirements|
+9. Related projects				|vim-async-mapper-related|
 
 ==============================================================================
 1. About This Plugin				*vim-async-mapper-about*
@@ -109,10 +110,10 @@ Common usage — map insert mode |jk| and |kj| to <ESC>
 
 The most common use case is to replace `vim-easyescape`: >
 
-  let g:vim_async_mapper_timeout = 100
+  let timeout_msec = 100
 
-  call g:embrace#amapper#register_insert_mode_map("kj", "\<ESC>")
-  call g:embrace#amapper#register_insert_mode_map("jk", "\<ESC>")
+  call g:embrace#amapper#register_insert_mode_map("kj", "\<ESC>", timeout_msec)
+  call g:embrace#amapper#register_insert_mode_map("jk", "\<ESC>", timeout_msec)
 <
 If you also wanted |kj| and |jk| to work from command mode,
 you could add two simple maps: >
@@ -124,8 +125,10 @@ Taking it even further, you could also add the same maps to normal
 mode to toggle _back_ to insert mode, and it won't interfere with
 the built-in `j` or `k` commands, e.g., >
 
-  call g:embrace#amapper#register_normal_mode_map("kj", "ji")
-  call g:embrace#amapper#register_normal_mode_map("jk", "ki")
+  let timeout_msec = 100
+
+  call g:embrace#amapper#register_normal_mode_map("kj", "ji", timeout_msec)
+  call g:embrace#amapper#register_normal_mode_map("jk", "ki", timeout_msec)
 <
 - So if you type |kj|, the `k` moves the cursor up one row, and
   the `j` triggers the map command. And then the map command
@@ -163,10 +166,10 @@ But after a while, you might grow tired of needing to leave insert
 mode to run |gf|! One idea is to map insert mode |gf| to running
 the normal mode command of the same name, e.g., >
 
-  let g:vim_async_mapper_timeout = 100
+  let timeout_msec = 100
 
   " Wire the `gf` key sequence to the `gf` command.
-  call g:embrace#amapper#register_insert_mode_map("gf", "gf")
+  call g:embrace#amapper#register_insert_mode_map("gf", "gf", timeout_msec)
 <
 You could similarly add a visual mode mapping: >
 
@@ -177,7 +180,31 @@ You could similarly add a visual mode mapping: >
   https://github.com/embrace-vim/vim-goto-file-sh/blob/release/plugin/includeexpr-for-gf.vim
 
 ==============================================================================
-6. Disable plugin for specific file types	*vim-async-mapper-disable*
+6. Timeout values				*vim-async-mapper-timeout*
+
+You can set a different timeout for each sequence, as shown in the
+examples above.
+
+If you omit the timeout, it defaults to the value of a global variable,
+`g:vim_async_mapper_timeout`, which defaults to 100 unless you change it,
+e.g., >
+
+  let g:vim_async_mapper_timeout = 100
+<
+
+Such a short timeout works well for the examples shown above, but you
+may need a longer timeout for other maps.
+
+- For instance, if you mix case, you might find that you need a longer
+  timeout, e.g., >
+
+  let timeout_msec = 200
+
+  call g:embrace#amapper#register_insert_mode_map("gW", "gW", timeout_msec)
+<
+
+==============================================================================
+7. Disable plugin for specific file types	*vim-async-mapper-disable*
 
 You can disable `vim-async-mapper` for specific file types (or for any
 buffer) by setting `b:vim_async_mapper_disable = 1`, e.g.: >
@@ -189,7 +216,7 @@ buffer) by setting `b:vim_async_mapper_disable = 1`, e.g.: >
   sequences instead of it being all-or-nothing.)
 
 ==============================================================================
-7. Requirements — Python 3 (Optional)		*vim-async-mapper-requirements*
+8. Requirements — Python 3 (Optional)		*vim-async-mapper-requirements*
 
 Python3 is required to set a timeout less than 2000 msec., e.g., >
 
@@ -220,7 +247,7 @@ Hints:
     https://github.com/DepoXy/depoxy/blob/1.4.0/home/.vim/_mrconfig#L53-L108
 
 ==============================================================================
-8. Related projects				*vim-async-mapper-related*
+9. Related projects				*vim-async-mapper-related*
 
 This project owes a debt of gratitude to `vim-easyescape`!
 

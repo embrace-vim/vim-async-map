@@ -80,7 +80,7 @@ let s:last_keypress_time_vim = 0
 "   within the timeout time between keypresses to run map_command.
 " - map_command: Command to run when the key sequence is detected.
 
-function! s:register_mapping(map_mode, key_sequence, map_command) abort
+function! s:register_mapping(map_mode, key_sequence, map_command, timeout) abort
   if !s:must_verify_map_mode(a:map_mode) | return | endif
     
   " Convert string into single-character List.
@@ -93,6 +93,7 @@ function! s:register_mapping(map_mode, key_sequence, map_command) abort
   \   "map_mode": a:map_mode,
   \   "key_list": key_list,
   \   "map_command": a:map_command,
+  \   "timeout": a:timeout,
   \ }
 
   call add(map_objs, map_obj)
@@ -115,12 +116,12 @@ function! s:register_mapping(map_mode, key_sequence, map_command) abort
   call s:reset_active_maps("i", force_reset)
 endfunction
 
-function! embrace#amapper#register_insert_mode_map(key_sequence, map_command) abort
-  call s:register_mapping("i", a:key_sequence, a:map_command)
+function! embrace#amapper#register_insert_mode_map(key_sequence, map_command, timeout = 0) abort
+  call s:register_mapping("i", a:key_sequence, a:map_command, a:timeout)
 endfunction
 
-function! embrace#amapper#register_normal_mode_map(key_sequence, map_command) abort
-  call s:register_mapping("n", a:key_sequence, a:map_command)
+function! embrace#amapper#register_normal_mode_map(key_sequence, map_command, timeout = 0) abort
+  call s:register_mapping("n", a:key_sequence, a:map_command, a:timeout)
 endfunction
 
 function! s:must_verify_map_mode(map_mode) abort
@@ -153,6 +154,7 @@ function! s:reset_active_maps(map_mode, force_reset = 0) abort
       \   "map_mode": imap_obj["map_mode"],
       \   "key_list": imap_obj["key_list"],
       \   "map_command": imap_obj["map_command"],
+      \   "timeout": imap_obj["timeout"],
       \   "reduction": imap_obj["key_list"],
       \ })
   endfor
@@ -171,11 +173,8 @@ function! s:process_keypress(map_mode, char) abort
 
   " ***
 
-  " Check if time between presses greater than timeout.
-  if s:amapper_read_timer() > g:vim_async_mapper_timeout
-    " Check keypress against start character of all sequences.
-    call s:reset_active_maps(a:map_mode)
-  endif
+  " We'll check if time between sequence keypresses is greater than timeout.
+  let elapsed_time = s:amapper_read_timer()
 
   " Reset the timer.
   call s:amapper_set_timer()
@@ -186,12 +185,21 @@ function! s:process_keypress(map_mode, char) abort
   let completed = {}
 
   for active_map in s:active_maps[a:map_mode]
+    let timeout = active_map["timeout"]
+    if timeout == 0 | let timeout = g:vim_async_mapper_timeout | endif
+
+    " Check if char press matches next char of any sequence.
+    " - If first char of sequence, ignore timeout. Otherwise
+    "   check how long it's been since the keypress before it.
     if active_map["reduction"][0] == a:char
+        \ && (len(active_map["reduction"]) == len(active_map["key_list"])
+        \     || elapsed_time <= timeout)
       if len(active_map["reduction"]) > 1
         let reduced_map = {
           \   "map_mode": active_map["map_mode"],
           \   "key_list": active_map["key_list"],
           \   "map_command": active_map["map_command"],
+          \   "timeout": active_map["timeout"],
           \   "reduction": active_map["key_list"][1:],
           \ }
         call add(reduction, reduced_map)
