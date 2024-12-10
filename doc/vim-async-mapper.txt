@@ -203,7 +203,7 @@ Hints:
     https://github.com/DepoXy/depoxy/blob/1.4.0/home/.vim/_mrconfig#L53-L108
 
 ==============================================================================
-8. Related projects			*vim-async-mapper-related*
+8. Related projects				*vim-async-mapper-related*
 
 This project owes a debt of gratitude to `vim-easyescape`!
 
