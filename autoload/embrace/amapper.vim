@@ -133,7 +133,7 @@ endfunction
 
 " ***
 
-function! s:reset_active_maps(map_mode, force_reset = 0)
+function! s:reset_active_maps(map_mode, force_reset = 0) abort
   if !s:must_verify_map_mode(a:map_mode) | return | endif
 
   if !s:is_reducing[a:map_mode] && !a:force_reset
@@ -161,7 +161,7 @@ endfunction
 " USAGE: Use b:vim_async_mapper_disable to disable based on filetype, e.g.,
 "
 "   autocmd FileType text,markdown call setbufvar(bufnr("%"), 'easyescape_disable', 1)
-function! s:process_keypress(map_mode, char)
+function! s:process_keypress(map_mode, char) abort
   if exists("b:vim_async_mapper_disable") && b:vim_async_mapper_disable == 1
 
     return a:char
@@ -328,7 +328,7 @@ endfunction
 
 " ***
 
-function! s:amapper_set_timer()
+function! s:amapper_set_timer() abort
   if s:haspy3
     py3 last_keypress_time_py3 = default_timer()
   endif
@@ -336,7 +336,7 @@ function! s:amapper_set_timer()
   let s:last_keypress_time_vim = localtime()
 endfunction
 
-function! s:amapper_read_timer()
+function! s:amapper_read_timer() abort
   if s:haspy3
     py3 vim.command("let pyresult = %g" % (1000 * (default_timer() - last_keypress_time_py3)))
 
@@ -361,7 +361,7 @@ function! s:init_vim_async_mapper_timeout() abort
   endif
 endfunction
 
-function! s:print_alert_python3_missing()
+function! s:print_alert_python3_missing() abort
   echomsg "ALERT: Python v3 required to set g:vim_async_mapper_timeout < 2000"
 
   if has('macunix')
