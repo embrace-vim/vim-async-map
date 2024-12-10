@@ -89,11 +89,13 @@ function! s:register_mapping(map_mode, key_sequence, map_command) abort
   " Add to list of all imap or nmap sequences the plugin manages.
   let map_objs = s:map_objs[a:map_mode]
 
-  call add(map_objs, {
-    \   "map_mode": a:map_mode,
-    \   "key_list": key_list,
-    \   "map_command": a:map_command,
-    \ })
+  let map_obj = {
+  \   "map_mode": a:map_mode,
+  \   "key_list": key_list,
+  \   "map_command": a:map_command,
+  \ }
+
+  call add(map_objs, map_obj)
 
   " Register an imap for each unique character. (We're basically sniffing
   " keyboard traffic, but only on keys that are part of a key sequence.)
@@ -342,7 +344,9 @@ function! s:amapper_read_timer() abort
 
     return pyresult
   else
-    return 1000 * (localtime() - s:last_keypress_time_vim)
+    let viresult = 1000 * (localtime() - s:last_keypress_time_vim)
+
+    return viresult
   endif
 endfunction
 
