@@ -396,36 +396,48 @@ endif
 
 " ***
 
-" ISOFF/2024-12-09: vim-easyescape plugin uses InsertCharPre to reset
-" sequence tracker, but I think it's redundant to what process_keypress
-" nmap does. (And we'll add a ModeChanged callback to at least reset the
-" tracker on mode change.)
+" In addition to the single-character maps, watch InsertCharPre. If the
+" user presses any other key that's *not* registered, reset the watch.
+" - This prevents, e.g., user typing `juke` and plugin matching `jk`.
+" - Note that process_InsertCharPre runs *after* process_keypress,
+"   and rather than look at v:char, we can check s:is_reducing to
+"   see if process_keypress is in the middle of processing a sequence
+"   or not (and if not, we'll reset the sequence trackers).
 "
-" " Resets or reduces the sequence checker according to most recent edit.
-" function! s:process_InsertCharPre()
-"   let do_reset = 1
-"   let map_mode = 'i'
-"
-"   for active_map in s:active_maps[map_mode]
-"     if active_map["reduction"][0] == v:char
-"       let do_reset = 0
-"     endif
-"   endfor
-"
-"   if do_reset
-"     " User pressed some other key than what's part of any sequence,
-"     " so reset the seq. maps
-"     call s:reset_active_maps(map_mode)
-"   endif
-" endfunction
-"
-" augroup vim_async_mapper_augroup
-"   au!
-"   au InsertCharPre * call s:process_InsertCharPre()
-" augroup END
+" BWARE: There's no equivalent for watching normal mode keypresses (as
+" far as the author knows), so user could still see false-positives.
+" - E.g., suppose user sets `jk` normal mode async sequence. If user
+"   types `juk` (down, undo, up) and the time between the `j` and `k`
+"   inputs is less than the timeout, this plugin will detect the `jk`
+"   sequence.
+"   - In practice, if the timeout is 100 msec., the author is unable
+"     to type `juk` fast enough. But at 200 msec. I can. (The fastest
+"     I can type `juk` is around ~115 msec. And `kuj` takes me 102
+"     msec. between the `k` and the `j`. So it seems like 100 msec.
+"     is sorta the ideal timeout, at least for normal mode `kj`/`jk`
+"     sequence.)
+"   
+function! s:process_InsertCharPre() abort
+  let map_mode = 'i'
+  if s:is_reducing[map_mode]
+    " The pressed key matched a sequence we're monitoring, and
+    " process_keypress just handled it (and set is_reducing=1).
+
+    return
+  endif
+
+  " User pressed some other key than what's part of any sequence,
+  " so reset seq. tracking.
+  call s:reset_active_maps(map_mode)
+endfunction
+
+" ***
 
 augroup vim_async_mapper_augroup
   au!
+
+  au InsertCharPre * call s:process_InsertCharPre()
+
   " REFER: exists('##event') checks autocommand supported by user's Vim.
   if exists('##ModeChanged')
     autocmd ModeChanged *:[ni] call s:reset_active_maps(v:event["new_mode"])
