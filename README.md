@@ -127,6 +127,23 @@ the built-in `j` or `k` commands, e.g.,
   runs `j` to move the cursor back down one row (to restore its
   position), and then `i` to enter insert mode.
 
+- Beware that the plugin cannot detect when the user "breaks" a
+  normal mode sequence. E.g., if the user registers `jk` but
+  then types `juk`, if less than timeout msecs. pass between
+  the `j` and the `k`, this plugin will assume that `jk` was
+  pressed.
+
+  - This does not affect insert mode maps because the plugin
+    monitors the `InsertCharPre` event and can detect when a
+    non-sequence character is pressed. But there is no equivalent
+    event for normal mode (and the plugin does not set a map
+    for every possible character — only those included in a
+    sequence).
+
+  - However, if you use a short, 100 msec. timeout, you should
+    not have an issue. (E.g., it takes the author 115 msec. to
+    type `juk` as fast as they can.)
+
 [easyescape_kj_jk]: https://github.com/landonb/vim-ovm-easyescape-kj-jk/blob/release/plugin/vim_ovm_easyescape_kj_jk.vim
 
 (You can see a real-world implementation in
