@@ -1,6 +1,6 @@
 # Asynchronous, non-blocking insert mode maps
 
-Use `vim-async-mapper` to add non-blocking insert mode maps
+Use `vim-async-map` to add non-blocking insert mode maps
 using "regular" characters.
 
 - Instead of using a `<Leader>` combination or modifiers (e.g., `<Ctrl>`)
@@ -43,7 +43,7 @@ and makes the following changes:
 
 ## Details
 
-`vim-async-mapper` lets you add nondisruptive insert mode maps.
+`vim-async-map` lets you add nondisruptive insert mode maps.
 
 - A normal, naïve insert map pauses input between keypresses, e.g.,
   if you wanted to be able to use `gf` to open file paths from
@@ -82,7 +82,7 @@ and makes the following changes:
            ↑ cursor
   ```
 
-- So instead of adding multiple-character mappings, `vim-async-mapper`
+- So instead of adding multiple-character mappings, `vim-async-map`
   adds single-character mappings and then monitors input to see if it
   matches any sequence that you've registered with it.
 
@@ -101,8 +101,8 @@ The most common use case is to replace `vim-easyescape`:
   ```
   let timeout_msec = 100
 
-  call g:embrace#amapper#register_insert_mode_map("kj", "\<ESC>", timeout_msec)
-  call g:embrace#amapper#register_insert_mode_map("jk", "\<ESC>", timeout_msec)
+  call g:embrace#async_map#register_insert_mode_map("kj", "\<ESC>", timeout_msec)
+  call g:embrace#async_map#register_insert_mode_map("jk", "\<ESC>", timeout_msec)
   ```
 
 If you also wanted `kj` and `jk` to work from command mode,
@@ -120,8 +120,8 @@ the built-in `j` or `k` commands, e.g.,
   ```
   let timeout_msec = 100
 
-  call g:embrace#amapper#register_normal_mode_map("kj", "ji", timeout_msec)
-  call g:embrace#amapper#register_normal_mode_map("jk", "ki", timeout_msec)
+  call g:embrace#async_map#register_normal_mode_map("kj", "ji", timeout_msec)
+  call g:embrace#async_map#register_normal_mode_map("jk", "ki", timeout_msec)
   ```
 
 - So if you type `kj`, the `k` moves the cursor up one row, and
@@ -165,7 +165,7 @@ the normal mode command of the same name, e.g.,
   let timeout_msec = 100
 
   " Wire the `gf` key sequence to the `gf` command.
-  call g:embrace#amapper#register_insert_mode_map("gf", "gf", timeout_msec)
+  call g:embrace#async_map#register_insert_mode_map("gf", "gf", timeout_msec)
   ```
 
 You could similarly add a visual mode mapping:
@@ -186,11 +186,11 @@ You can set a different timeout for each sequence, as shown in the
 examples above.
 
 If you omit the timeout, it defaults to the value of a global variable,
-`g:vim_async_mapper_timeout`, which defaults to 100 unless you change it,
+`g:vim_async_map_timeout`, which defaults to 100 unless you change it,
 e.g.,
 
   ```
-  let g:vim_async_mapper_timeout = 100
+  let g:vim_async_map_timeout = 100
   ```
 
 Such a short timeout works well for the examples shown above, but you
@@ -202,16 +202,16 @@ may need a longer timeout for other maps.
   ```
   let timeout_msec = 200
 
-  call g:embrace#amapper#register_insert_mode_map("gW", "gW", timeout_msec)
+  call g:embrace#async_map#register_insert_mode_map("gW", "gW", timeout_msec)
   ```
 
 ## Disable plugin for specific file types
 
-You can disable `vim-async-mapper` for specific file types (or for any
-buffer) by setting `b:vim_async_mapper_disable = 1`, e.g.:
+You can disable `vim-async-map` for specific file types (or for any
+buffer) by setting `b:vim_async_map_disable = 1`, e.g.:
 
   ```
-  autocmd FileType text,markdown call setbufvar(bufnr("%"), 'vim_async_mapper_disable', 1)
+  autocmd FileType text,markdown call setbufvar(bufnr("%"), 'vim_async_map_disable', 1)
   ```
 
 - This applies to all registered mappings, however. (Feel free to PR if
@@ -223,7 +223,7 @@ buffer) by setting `b:vim_async_mapper_disable = 1`, e.g.:
 Python3 is required to set a timeout less than 2000 msec., e.g.,
 
   ```
-  let g:vim_async_mapper_timeout = 100
+  let g:vim_async_map_timeout = 100
   ```
 
 Otherwise the shortest usable timeout will be 2 secs.
@@ -274,13 +274,13 @@ If you want to test the package first, make it optional instead
 Clone the project to the desired path:
 
   ```
-  git clone https://github.com/embrace-vim/vim-async-mapper.git
+  git clone https://github.com/embrace-vim/vim-async-map.git
   ```
 
 If you installed to the optional path, tell Vim to load the package:
 
   ```
-  :packadd! vim-async-mapper
+  :packadd! vim-async-map
   ```
 
 Just once, tell Vim to build the online help:
@@ -292,7 +292,7 @@ Just once, tell Vim to build the online help:
 Then whenever you want to reference the help from Vim, run:
 
   ```
-  :help vim-async-mapper
+  :help vim-async-map
   ```
 
 [vim-plug]: https://github.com/junegunn/vim-plug
@@ -313,7 +313,7 @@ occasionally).
   call plug#begin()
 
   " List your plugins here
-  Plug 'embrace-vim/vim-async-mapper'
+  Plug 'embrace-vim/vim-async-map'
 
   call plug#end()
   ```
@@ -341,7 +341,7 @@ occasionally).
   " let Vundle manage Vundle, required
   Plugin 'VundleVim/Vundle.vim'
 
-  Plugin 'embrace-vim/vim-async-mapper'
+  Plugin 'embrace-vim/vim-async-map'
 
   " All of your Plugins must be added before the following line
   call vundle#end()            " required
@@ -381,8 +381,8 @@ occasionally).
   [DEFAULT]
   skip = mr_exclusive "vim-plugins"
 
-  [pack/embrace-vim/start/vim-async-mapper]
-  lib = remote_set origin https://github.com/embrace-vim/vim-async-mapper.git
+  [pack/embrace-vim/start/vim-async-map]
+  lib = remote_set origin https://github.com/embrace-vim/vim-async-map.git
 
   [DEFAULT]
   skip = false

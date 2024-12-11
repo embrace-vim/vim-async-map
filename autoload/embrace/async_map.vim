@@ -1,6 +1,6 @@
 " vim:tw=0:ts=2:sw=2:et:norl:
 " Author: Landon Bouma <https://tallybark.com/>
-" Project: https://github.com/embrace-vim/vim-async-mapper#જ⁀➴
+" Project: https://github.com/embrace-vim/vim-async-map#જ⁀➴
 " Summary: vim-easyescape fork avoids edits, supports arbitrary commands
 " License: MIT | Copyright © 2024 Landon Bouma, © 2017 Yichao Zhou
 
@@ -19,13 +19,13 @@
 "        https://github.com/landonb/vim-source-reloader#↩️
 " - Uncomment this `unlet` (or disable the `finish`) and hit <F9>.
 "
-" silent! unlet g:loaded_vim_async_mapper_autoload_amapper
+" silent! unlet g:loaded_vim_async_map_autoload_async_map
 
-if exists("g:loaded_vim_async_mapper_autoload_amapper") || &cp
+if exists("g:loaded_vim_async_map_autoload_async_map") || &cp
   finish
 endif
 
-let g:loaded_vim_async_mapper_autoload_amapper = 1
+let g:loaded_vim_async_map_autoload_async_map = 1
 
 " -------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ let g:loaded_vim_async_mapper_autoload_amapper = 1
 "   :help optional-function-argument
 " https://github.com/vim/vim/commit/42ae78cfff171fbd7412306083fe200245d7a7a6
 if ! has("patch-8.1.1310")
-  echom "ALERT: Please upgrade to Vim 8.1.1310 or better to use embrace-vim/vim-async-mapper"
+  echom "ALERT: Please upgrade to Vim 8.1.1310 or better to use embrace-vim/vim-async-map"
 
   finish
 endif
@@ -64,10 +64,10 @@ let s:active_maps = {"i": [], "n": []}
 let s:is_reducing = {"i": 1, "n": 1}
 
 " Max. time between keypresses for sequence to be detected. If two characters
-" are typed more than g:vim_async_mapper_timeout msec. apart, the
+" are typed more than g:vim_async_map_timeout msec. apart, the
 " command_seq will not be run.
 " - See below:
-"   s:init_vim_async_mapper_timeout()
+"   s:init_vim_async_map_timeout()
 "
 " Latest keypress time if Python not available, used to detect timeout.
 " - We'll maintain either `py3 last_keypress_time_py3` or this value.
@@ -116,17 +116,17 @@ function! s:register_mapping(map_mode, key_sequence, map_command, timeout) abort
   call s:reset_active_maps("i", force_reset)
 endfunction
 
-function! embrace#amapper#register_insert_mode_map(key_sequence, map_command, timeout = 0) abort
+function! embrace#async_map#register_insert_mode_map(key_sequence, map_command, timeout = 0) abort
   call s:register_mapping("i", a:key_sequence, a:map_command, a:timeout)
 endfunction
 
-function! embrace#amapper#register_normal_mode_map(key_sequence, map_command, timeout = 0) abort
+function! embrace#async_map#register_normal_mode_map(key_sequence, map_command, timeout = 0) abort
   call s:register_mapping("n", a:key_sequence, a:map_command, a:timeout)
 endfunction
 
 function! s:must_verify_map_mode(map_mode) abort
   if index(["i", "n"], a:map_mode) < 0
-    echomsg "GAFFE: embrace#amapper: Please specify map_mode 'i' or 'n'"
+    echomsg "GAFFE: embrace#async_map: Please specify map_mode 'i' or 'n'"
 
     return 0
   endif
@@ -162,11 +162,11 @@ endfunction
 
 " ***
 
-" USAGE: Use b:vim_async_mapper_disable to disable based on filetype, e.g.,
+" USAGE: Use b:vim_async_map_disable to disable based on filetype, e.g.,
 "
 "   autocmd FileType text,markdown call setbufvar(bufnr("%"), 'easyescape_disable', 1)
 function! s:process_keypress(map_mode, char) abort
-  if exists("b:vim_async_mapper_disable") && b:vim_async_mapper_disable == 1
+  if exists("b:vim_async_map_disable") && b:vim_async_map_disable == 1
 
     return a:char
   endif
@@ -174,10 +174,10 @@ function! s:process_keypress(map_mode, char) abort
   " ***
 
   " We'll check if time between sequence keypresses is greater than timeout.
-  let elapsed_time = s:amapper_read_timer()
+  let elapsed_time = s:async_map_read_timer()
 
   " Reset the timer.
-  call s:amapper_set_timer()
+  call s:async_map_set_timer()
 
   " ***
 
@@ -186,7 +186,7 @@ function! s:process_keypress(map_mode, char) abort
 
   for active_map in s:active_maps[a:map_mode]
     let timeout = active_map["timeout"]
-    if timeout == 0 | let timeout = g:vim_async_mapper_timeout | endif
+    if timeout == 0 | let timeout = g:vim_async_map_timeout | endif
 
     " Check if char press matches next char of any sequence.
     " - If first char of sequence, ignore timeout. Otherwise
@@ -286,7 +286,7 @@ function! s:process_keypress(map_mode, char) abort
       "   would otherwise require timer hacks).' But author failed to get
       "   it to work (and not sure this is an appropriate use case, either).
       if do_callback
-        let timer_id = timer_start(0, "VimInsertModeMapperVerifyUndoAndRunCommand")
+        let timer_id = timer_start(0, "VimInsertModeMapVerifyUndoAndRunCommand")
       endif
     endif
 
@@ -310,7 +310,7 @@ function! s:process_keypress(map_mode, char) abort
   return a:char
 endfunction
 
-function! VimInsertModeMapperVerifyUndoAndRunCommand(timer_id) abort
+function! VimInsertModeMapVerifyUndoAndRunCommand(timer_id) abort
   let after_line = getline(".")
   if s:before_lnum != len(".")
       \ || len(s:before_line) != len(after_line) + len(s:completed["key_list"]) - 1
@@ -338,7 +338,7 @@ endfunction
 
 " ***
 
-function! s:amapper_set_timer() abort
+function! s:async_map_set_timer() abort
   if s:haspy3
     py3 last_keypress_time_py3 = default_timer()
   endif
@@ -346,7 +346,7 @@ function! s:amapper_set_timer() abort
   let s:last_keypress_time_vim = localtime()
 endfunction
 
-function! s:amapper_read_timer() abort
+function! s:async_map_read_timer() abort
   if s:haspy3
     py3 vim.command("let pyresult = %g" % (1000 * (default_timer() - last_keypress_time_py3)))
 
@@ -359,22 +359,22 @@ function! s:amapper_read_timer() abort
 endfunction
 
 " On load, set initial timer value.
-function! s:init_vim_async_mapper_timeout() abort
-  if g:vim_async_mapper_timeout == 0
+function! s:init_vim_async_map_timeout() abort
+  if g:vim_async_map_timeout == 0
     if s:haspy3
-      let g:vim_async_mapper_timeout = 100
+      let g:vim_async_map_timeout = 100
     else
-      let g:vim_async_mapper_timeout = 2000
+      let g:vim_async_map_timeout = 2000
     endif
-  elseif !s:haspy3 && g:vim_async_mapper_timeout < 2000
+  elseif !s:haspy3 && g:vim_async_map_timeout < 2000
     call s:print_alert_python3_missing()
 
-    let g:vim_async_mapper_timeout = 2000
+    let g:vim_async_map_timeout = 2000
   endif
 endfunction
 
 function! s:print_alert_python3_missing() abort
-  echomsg "ALERT: Python v3 required to set g:vim_async_mapper_timeout < 2000"
+  echomsg "ALERT: Python v3 required to set g:vim_async_map_timeout < 2000"
 
   if has('macunix')
     echomsg "- USAGE: On macOS, ensure MacVim installed and its vim/vi are on PATH before Apple's"
@@ -385,11 +385,11 @@ function! s:print_alert_python3_missing() abort
   endif
 endfunction
 
-if !exists("g:vim_async_mapper_timeout")
-  let g:vim_async_mapper_timeout = 0
+if !exists("g:vim_async_map_timeout")
+  let g:vim_async_map_timeout = 0
 endif
 
-call s:init_vim_async_mapper_timeout()
+call s:init_vim_async_map_timeout()
 
 " Load Python modules, which stay loaded.
 if s:haspy3
@@ -397,7 +397,7 @@ if s:haspy3
   py3 import vim
   " Initialize timer value, which is used to verify map sequences.
   " - This value is updated by process_keypress.
-  call s:amapper_set_timer()
+  call s:async_map_set_timer()
 else
   let s:last_keypress_time_vim = localtime()
 endif
@@ -440,7 +440,7 @@ endfunction
 
 " ***
 
-augroup vim_async_mapper_augroup
+augroup vim_async_map_augroup
   au!
 
   au InsertCharPre * call s:process_InsertCharPre()

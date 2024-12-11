@@ -1,33 +1,33 @@
-*vim-async-mapper.txt*	Distraction-free insert maps.	2024 Dec 09
+*vim-async-map.txt*	Distraction-free insert maps.	2024 Dec 09
 
-VIM ASYNC MAPPER: Add non-blocking insert mode maps.~
+VIM ASYNC MAP: Add non-blocking insert mode maps.~
 
-VIM ASYNC MAPPER				*vim-async-mapper*
+VIM ASYNC MAP					*vim-async-map*
 
-1. About This Plugin				|vim-async-mapper-about|
-2. Fork Improvements				|vim-async-mapper-fork|
-3. Details					|vim-async-mapper-details|
-4. Example #1 — Use `jk`/`kj` to `<ESC>`	|vim-async-mapper-example-1|
-5. Example #2 — Use `gf` in insert mode		|vim-async-mapper-example-2|
-6. Timeout values				|vim-async-mapper-timeout|
-7. Disable plugin for specific file types	|vim-async-mapper-disable|
-8. Requirements — Python 3 (Optional)		|vim-async-mapper-requirements|
-9. Related projects				|vim-async-mapper-related|
+1. About This Plugin				|vim-async-map-about|
+2. Fork Improvements				|vim-async-map-fork|
+3. Details					|vim-async-map-details|
+4. Example #1 — Use `jk`/`kj` to `<ESC>`	|vim-async-map-example-1|
+5. Example #2 — Use `gf` in insert mode		|vim-async-map-example-2|
+6. Timeout values				|vim-async-map-timeout|
+7. Disable plugin for specific file types	|vim-async-map-disable|
+8. Requirements — Python 3 (Optional)		|vim-async-map-requirements|
+9. Related projects				|vim-async-map-related|
 
 ==============================================================================
-1. About This Plugin				*vim-async-mapper-about*
+1. About This Plugin				*vim-async-map-about*
 
-Use `vim-async-mapper` to add non-blocking insert mode maps
+Use `vim-async-map` to add non-blocking insert mode maps
 using "regular" characters.
 
 - Instead of using a <Leader> combination or modifiers (e.g., <Ctrl>)
   to wire insert mode maps, you can wire normal character sequences
   (such as |gf|) without disrupting the normal user experience.
 
-Project page: https://github.com/embrace-vim/vim-async-mapper
+Project page: https://github.com/embrace-vim/vim-async-map
 
 ==============================================================================
-2. Fork Improvements				*vim-async-mapper-fork*
+2. Fork Improvements				*vim-async-map-fork*
 
 This project forks `vim-easyescape` https://github.com/zhou13/vim-easyescape
 and makes the following changes:
@@ -58,9 +58,9 @@ and makes the following changes:
     sequence, so that the file buffer remains unchanged.
 
 ==============================================================================
-3. Details					*vim-async-mapper-details*
+3. Details					*vim-async-map-details*
 
-`vim-async-mapper` lets you add nondisruptive insert mode maps.
+`vim-async-map` lets you add nondisruptive insert mode maps.
 
 - A normal, naïve insert map pauses input between keypresses, e.g.,
   if you wanted to be able to use |gf| to open file paths from
@@ -91,7 +91,7 @@ and makes the following changes:
     this is gsome text
              ↑ cursor
 <
-- So instead of adding multiple-character mappings, `vim-async-mapper`
+- So instead of adding multiple-character mappings, `vim-async-map`
   adds single-character mappings and then monitors input to see if it
   matches any sequence that you've registered with it.
 
@@ -104,7 +104,7 @@ and makes the following changes:
     will run the command you've registered for that sequence.
 
 ==============================================================================
-4. Example #1 — Use `jk`/`kj` to `<ESC>`	*vim-async-mapper-example-1*
+4. Example #1 — Use `jk`/`kj` to `<ESC>`	*vim-async-map-example-1*
 
 Common usage — map insert mode |jk| and |kj| to <ESC>
 
@@ -112,8 +112,8 @@ The most common use case is to replace `vim-easyescape`: >
 
   let timeout_msec = 100
 
-  call g:embrace#amapper#register_insert_mode_map("kj", "\<ESC>", timeout_msec)
-  call g:embrace#amapper#register_insert_mode_map("jk", "\<ESC>", timeout_msec)
+  call g:embrace#async_map#register_insert_mode_map("kj", "\<ESC>", timeout_msec)
+  call g:embrace#async_map#register_insert_mode_map("jk", "\<ESC>", timeout_msec)
 <
 If you also wanted |kj| and |jk| to work from command mode,
 you could add two simple maps: >
@@ -127,8 +127,8 @@ the built-in `j` or `k` commands, e.g., >
 
   let timeout_msec = 100
 
-  call g:embrace#amapper#register_normal_mode_map("kj", "ji", timeout_msec)
-  call g:embrace#amapper#register_normal_mode_map("jk", "ki", timeout_msec)
+  call g:embrace#async_map#register_normal_mode_map("kj", "ji", timeout_msec)
+  call g:embrace#async_map#register_normal_mode_map("jk", "ki", timeout_msec)
 <
 - So if you type |kj|, the `k` moves the cursor up one row, and
   the `j` triggers the map command. And then the map command
@@ -156,7 +156,7 @@ the built-in `j` or `k` commands, e.g., >
   https://github.com/landonb/vim-ovm-easyescape-kj-jk/blob/release/plugin/vim_ovm_easyescape_kj_jk.vim
 
 ==============================================================================
-5. Example #2 — Use `gf` in insert mode		*vim-async-mapper-example-2*
+5. Example #2 — Use `gf` in insert mode		*vim-async-map-example-2*
 
 The |gf| command is very useful, especially if you bop around source code
 and note files a lot and leave yourself file path references in comments
@@ -169,7 +169,7 @@ the normal mode command of the same name, e.g., >
   let timeout_msec = 100
 
   " Wire the `gf` key sequence to the `gf` command.
-  call g:embrace#amapper#register_insert_mode_map("gf", "gf", timeout_msec)
+  call g:embrace#async_map#register_insert_mode_map("gf", "gf", timeout_msec)
 <
 You could similarly add a visual mode mapping: >
 
@@ -180,16 +180,16 @@ You could similarly add a visual mode mapping: >
   https://github.com/embrace-vim/vim-goto-file-sh/blob/release/plugin/includeexpr-for-gf.vim
 
 ==============================================================================
-6. Timeout values				*vim-async-mapper-timeout*
+6. Timeout values				*vim-async-map-timeout*
 
 You can set a different timeout for each sequence, as shown in the
 examples above.
 
 If you omit the timeout, it defaults to the value of a global variable,
-`g:vim_async_mapper_timeout`, which defaults to 100 unless you change it,
+`g:vim_async_map_timeout`, which defaults to 100 unless you change it,
 e.g., >
 
-  let g:vim_async_mapper_timeout = 100
+  let g:vim_async_map_timeout = 100
 <
 
 Such a short timeout works well for the examples shown above, but you
@@ -200,27 +200,27 @@ may need a longer timeout for other maps.
 
   let timeout_msec = 200
 
-  call g:embrace#amapper#register_insert_mode_map("gW", "gW", timeout_msec)
+  call g:embrace#async_map#register_insert_mode_map("gW", "gW", timeout_msec)
 <
 
 ==============================================================================
-7. Disable plugin for specific file types	*vim-async-mapper-disable*
+7. Disable plugin for specific file types	*vim-async-map-disable*
 
-You can disable `vim-async-mapper` for specific file types (or for any
-buffer) by setting `b:vim_async_mapper_disable = 1`, e.g.: >
+You can disable `vim-async-map` for specific file types (or for any
+buffer) by setting `b:vim_async_map_disable = 1`, e.g.: >
 
-  autocmd FileType text,markdown call setbufvar(bufnr("%"), 'vim_async_mapper_disable', 1)
+  autocmd FileType text,markdown call setbufvar(bufnr("%"), 'vim_async_map_disable', 1)
 <
 - This applies to all registered mappings, however. (Feel free to PR if
   you want to make it more discerning, i.e., to disable individual key
   sequences instead of it being all-or-nothing.)
 
 ==============================================================================
-8. Requirements — Python 3 (Optional)		*vim-async-mapper-requirements*
+8. Requirements — Python 3 (Optional)		*vim-async-map-requirements*
 
 Python3 is required to set a timeout less than 2000 msec., e.g., >
 
-    let g:vim_async_mapper_timeout = 100
+    let g:vim_async_map_timeout = 100
 <
 Otherwise the shortest usable timeout will be 2 secs.
 
@@ -247,7 +247,7 @@ Hints:
     https://github.com/DepoXy/depoxy/blob/1.4.0/home/.vim/_mrconfig#L53-L108
 
 ==============================================================================
-9. Related projects				*vim-async-mapper-related*
+9. Related projects				*vim-async-map-related*
 
 This project owes a debt of gratitude to `vim-easyescape`!
 
