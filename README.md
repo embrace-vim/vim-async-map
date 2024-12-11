@@ -175,10 +175,10 @@ You could similarly add a visual mode mapping:
   vnoremap gf y:edit <C-r>"<CR>
   ```
 
-[includeexpr-for-gf]: https://github.com/embrace-vim/vim-goto-file-sh/blob/1.3.0/plugin/includeexpr-for-gf.vim
+[includeexpr-for-gf]: https://github.com/embrace-vim/vim-goto-file-sh/blob/1.3.1/after/plugin/async-mode-maps.vim
 
 (You can see a real-world implementation in
-[https://github.com/embrace-vim/vim-goto-file-sh/blob/1.3.0/plugin/includeexpr-for-gf.vim][includeexpr-for-gf].)
+[https://github.com/embrace-vim/vim-goto-file-sh/blob/1.3.1/after/plugin/async-mode-maps.vim][includeexpr-for-gf].)
 
 ## Timeout values
 
