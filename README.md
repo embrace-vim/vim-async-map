@@ -49,9 +49,9 @@ and makes the following changes:
   if you wanted to be able to use `gf` to open file paths from
   insert mode, you could add a basic `imap`, e.g.,
 
-    ```
-    inoremap gf <C-O>gf
-    ```
+  ```
+  inoremap gf <C-O>gf
+  ```
 
   But this will degrade your user experience — now when you type
   a `g`, instead of inserting the character, Vim will show a `g`
@@ -60,27 +60,27 @@ and makes the following changes:
 
   - E.g., assume the cursor is before 's' on the following line:
 
-    ```
-    this is some text
-            ↑ cursor
-    ```
+  ```
+  this is some text
+          ↑ cursor
+  ```
 
-    When you press `g`, you'll see this:
+  When you press `g`, you'll see this:
 
-    ```
-    this is gome text
-            ↑ cursor
-    ```
+  ```
+  this is gome text
+          ↑ cursor
+  ```
 
-    And not until a timeout occurs, or until you press another key
-    (other than `f`) will the insert happen.
+  And not until a timeout occurs, or until you press another key
+  (other than `f`) will the insert happen.
 
-    And you'll finally see, e.g.,
+  And you'll finally see, e.g.,
 
-    ```
-    this is gsome text
-             ↑ cursor
-    ```
+  ```
+  this is gsome text
+           ↑ cursor
+  ```
 
 - So instead of adding multiple-character mappings, `vim-async-mapper`
   adds single-character mappings and then monitors input to see if it
@@ -222,9 +222,9 @@ buffer) by setting `b:vim_async_mapper_disable = 1`, e.g.:
 
 Python3 is required to set a timeout less than 2000 msec., e.g.,
 
-    ```
-    let g:vim_async_mapper_timeout = 100
-    ```
+  ```
+  let g:vim_async_mapper_timeout = 100
+  ```
 
 Otherwise the shortest usable timeout will be 2 secs.
 
@@ -258,42 +258,42 @@ Installation is easy using the packages feature (see
 To install the package so that it will automatically load on Vim startup,
 use a `start` directory, e.g.,
 
-    ```
-    mkdir -p ~/.vim/pack/embrace-vim/start
-    cd ~/.vim/pack/embrace-vim/start
-    ```
+  ```
+  mkdir -p ~/.vim/pack/embrace-vim/start
+  cd ~/.vim/pack/embrace-vim/start
+  ```
 
 If you want to test the package first, make it optional instead
 (see [`:help pack-add`](https://vimhelp.org/repeat.txt.html#pack-add)):
 
-    ```
-    mkdir -p ~/.vim/pack/embrace-vim/opt
-    cd ~/.vim/pack/embrace-vim/opt
-    ```
+  ```
+  mkdir -p ~/.vim/pack/embrace-vim/opt
+  cd ~/.vim/pack/embrace-vim/opt
+  ```
 
 Clone the project to the desired path:
 
-    ```
-    git clone https://github.com/embrace-vim/vim-async-mapper.git
-    ```
+  ```
+  git clone https://github.com/embrace-vim/vim-async-mapper.git
+  ```
 
 If you installed to the optional path, tell Vim to load the package:
 
-    ```
-    :packadd! vim-async-mapper
-    ```
+  ```
+  :packadd! vim-async-mapper
+  ```
 
 Just once, tell Vim to build the online help:
 
-    ```
-    :Helptags
-    ```
+  ```
+  :Helptags
+  ```
 
 Then whenever you want to reference the help from Vim, run:
 
-    ```
-    :help vim-async-mapper
-    ```
+  ```
+  :help vim-async-mapper
+  ```
 
 [vim-plug]: https://github.com/junegunn/vim-plug
 [Vundle]: https://github.com/VundleVim/Vundle.vim
@@ -309,53 +309,53 @@ occasionally).
   - You could then skip the steps above and register
     the plugin like this, e.g.:
 
-    ```
-    call plug#begin()
+  ```
+  call plug#begin()
 
-    " List your plugins here
-    Plug 'embrace-vim/vim-async-mapper'
+  " List your plugins here
+  Plug 'embrace-vim/vim-async-mapper'
 
-    call plug#end()
-    ```
+  call plug#end()
+  ```
 
 - And to update, call:
 
-    ```
-    :PlugUpdate
-    ```
+  ```
+  :PlugUpdate
+  ```
 
 - Similarly, there's also [`Vundle`][Vundle].
 
   - You'd configure it something like this:
 
-    ```
-    set nocompatible              " be iMproved, required
-    filetype off                  " required
+  ```
+  set nocompatible              " be iMproved, required
+  filetype off                  " required
 
-    " set the runtime path to include Vundle and initialize
-    set rtp+=~/.vim/bundle/Vundle.vim
-    call vundle#begin()
-    " alternatively, pass a path where Vundle should install plugins
-    "call vundle#begin('~/some/path/here')
+  " set the runtime path to include Vundle and initialize
+  set rtp+=~/.vim/bundle/Vundle.vim
+  call vundle#begin()
+  " alternatively, pass a path where Vundle should install plugins
+  "call vundle#begin('~/some/path/here')
 
-    " let Vundle manage Vundle, required
-    Plugin 'VundleVim/Vundle.vim'
+  " let Vundle manage Vundle, required
+  Plugin 'VundleVim/Vundle.vim'
 
-    Plugin 'embrace-vim/vim-async-mapper'
+  Plugin 'embrace-vim/vim-async-mapper'
 
-    " All of your Plugins must be added before the following line
-    call vundle#end()            " required
-    filetype plugin indent on    " required
-    " To ignore plugin indent changes, instead use:
-    "filetype plugin on
-    ```
+  " All of your Plugins must be added before the following line
+  call vundle#end()            " required
+  filetype plugin indent on    " required
+  " To ignore plugin indent changes, instead use:
+  "filetype plugin on
+  ```
 
 - And then to update, call one of these:
 
-    ```
-    :PluginInstall!
-    :PluginUpdate
-    ```
+  ```
+  :PluginInstall!
+  :PluginUpdate
+  ```
 
 - Or, if you're like the author, you could use a multi-repo Git tool,
   such as [`myrepos`][myrepos] (along with the author's library, [`ohmyrepos`][ohmyrepos])).
@@ -363,30 +363,30 @@ occasionally).
   - With [`myrepos`][myrepos], you could update all your Git repos with
     the following command:
 
-    ```
-    mr -d / pull
-    ```
+  ```
+  mr -d / pull
+  ```
 
 - Alternatively, if you use [`ohmyrepos`][ohmyrepos], you could pull
   just Vim plugin changes with something like this:
 
-    ```
-    MR_INCLUDE=vim-plugins mr -d / pull
-    ```
+  ```
+  MR_INCLUDE=vim-plugins mr -d / pull
+  ```
 
 - After you identify your vim-plugins using the 'skip' action, e.g.:
 
-    ```
-    # Put this in ~/.mrconfig, or something loaded by it.
-    [DEFAULT]
-    skip = mr_exclusive "vim-plugins"
+  ```
+  # Put this in ~/.mrconfig, or something loaded by it.
+  [DEFAULT]
+  skip = mr_exclusive "vim-plugins"
 
-    [pack/embrace-vim/start/vim-async-mapper]
-    lib = remote_set origin https://github.com/embrace-vim/vim-async-mapper.git
+  [pack/embrace-vim/start/vim-async-mapper]
+  lib = remote_set origin https://github.com/embrace-vim/vim-async-mapper.git
 
-    [DEFAULT]
-    skip = false
-    ```
+  [DEFAULT]
+  skip = false
+  ```
 
 ## Attribution
 
