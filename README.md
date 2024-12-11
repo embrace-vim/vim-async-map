@@ -146,10 +146,10 @@ the built-in `j` or `k` commands, e.g.,
     not have an issue. (E.g., it takes the author 115 msec. to
     type `juk` as fast as they can.)
 
-[easyescape_kj_jk]: https://github.com/landonb/vim-ovm-easyescape-kj-jk/blob/release/plugin/vim_ovm_easyescape_kj_jk.vim
+[easyescape_kj_jk]: https://github.com/landonb/vim-ovm-easyescape-kj-jk/blob/2.0.0/plugin/vim_ovm_easyescape_kj_jk.vim
 
 (You can see a real-world implementation in
-[https://github.com/landonb/vim-ovm-easyescape-kj-jk/blob/release/plugin/vim_ovm_easyescape_kj_jk.vim][easyescape_kj_jk].)
+[https://github.com/landonb/vim-ovm-easyescape-kj-jk/blob/2.0.0/plugin/vim_ovm_easyescape_kj_jk.vim][easyescape_kj_jk].)
 
 ## Common usage — map insert mode `gf` to normal mode `gf` ("goto file")
 
@@ -175,10 +175,10 @@ You could similarly add a visual mode mapping:
   vnoremap gf y:edit <C-r>"<CR>
   ```
 
-[includeexpr-for-gf]: https://github.com/embrace-vim/vim-goto-file-sh/blob/release/plugin/includeexpr-for-gf.vim
+[includeexpr-for-gf]: https://github.com/embrace-vim/vim-goto-file-sh/blob/1.3.0/plugin/includeexpr-for-gf.vim
 
 (You can see a real-world implementation in
-[https://github.com/embrace-vim/vim-goto-file-sh/blob/release/plugin/includeexpr-for-gf.vim][includeexpr-for-gf].)
+[https://github.com/embrace-vim/vim-goto-file-sh/blob/1.3.0/plugin/includeexpr-for-gf.vim][includeexpr-for-gf].)
 
 ## Timeout values
 
