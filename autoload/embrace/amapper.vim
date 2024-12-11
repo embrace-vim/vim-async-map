@@ -1,5 +1,5 @@
 " vim:tw=0:ts=2:sw=2:et:norl:
-" Author: Landon Bouma <https://tallybark.com/> 
+" Author: Landon Bouma <https://tallybark.com/>
 " Project: https://github.com/embrace-vim/vim-async-mapper#જ⁀➴
 " Summary: vim-easyescape fork avoids edits, supports arbitrary commands
 " License: MIT | Copyright © 2024 Landon Bouma, © 2017 Yichao Zhou
@@ -68,7 +68,7 @@ let s:is_reducing = {"i": 1, "n": 1}
 " command_seq will not be run.
 " - See below:
 "   s:init_vim_async_mapper_timeout()
-" 
+"
 " Latest keypress time if Python not available, used to detect timeout.
 " - We'll maintain either `py3 last_keypress_time_py3` or this value.
 let s:last_keypress_time_vim = 0
@@ -82,7 +82,7 @@ let s:last_keypress_time_vim = 0
 
 function! s:register_mapping(map_mode, key_sequence, map_command, timeout) abort
   if !s:must_verify_map_mode(a:map_mode) | return | endif
-    
+
   " Convert string into single-character List.
   let key_list = split(a:key_sequence, '.\{1}\zs')
 
@@ -424,7 +424,6 @@ endif
 "     msec. between the `k` and the `j`. So it seems like 100 msec.
 "     is sorta the ideal timeout, at least for normal mode `kj`/`jk`
 "     sequence.)
-"   
 function! s:process_InsertCharPre() abort
   let map_mode = 'i'
   if s:is_reducing[map_mode]
