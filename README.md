@@ -120,8 +120,8 @@ the built-in `j` or `k` commands, e.g.,
   ```
   let timeout_msec = 100
 
-  call g:embrace#async_map#register_normal_mode_map("kj", "ji", timeout_msec)
-  call g:embrace#async_map#register_normal_mode_map("jk", "ki", timeout_msec)
+  call g:embrace#async_map#RegisterNormalModeMap("kj", "ji", timeout_msec)
+  call g:embrace#async_map#RegisterNormalModeMap("jk", "ki", timeout_msec)
   ```
 
 - So if you type `kj`, the `k` moves the cursor up one row, and

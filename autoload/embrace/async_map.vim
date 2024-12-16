@@ -107,7 +107,7 @@ function! embrace#async_map#RegisterInsertModeMap(key_sequence, map_command, tim
   call s:RegisterMapping("i", a:key_sequence, a:map_command, a:timeout)
 endfunction
 
-function! embrace#async_map#register_normal_mode_map(key_sequence, map_command, timeout = 0) abort
+function! embrace#async_map#RegisterNormalModeMap(key_sequence, map_command, timeout = 0) abort
   call s:RegisterMapping("n", a:key_sequence, a:map_command, a:timeout)
 endfunction
 
