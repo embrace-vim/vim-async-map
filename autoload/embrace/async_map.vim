@@ -15,20 +15,6 @@
 
 " -------------------------------------------------------------------
 
-" USAGE: After editing this plugin, you can reload it on the fly with
-"        https://github.com/landonb/vim-source-reloader#↩️
-" - Uncomment this `unlet` (or disable the `finish`) and hit <F9>.
-"
-" silent! unlet g:loaded_vim_async_map_autoload_async_map
-
-if exists("g:loaded_vim_async_map_autoload_async_map") || &cp
-  finish
-endif
-
-let g:loaded_vim_async_map_autoload_async_map = 1
-
-" -------------------------------------------------------------------
-
 " REFER: Default args support:
 "   :help optional-function-argument
 " https://github.com/vim/vim/commit/42ae78cfff171fbd7412306083fe200245d7a7a6
