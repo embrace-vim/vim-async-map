@@ -53,7 +53,7 @@ let s:is_reducing = {"i": 1, "n": 1}
 " are typed more than g:vim_async_map_timeout msec. apart, the
 " command_seq will not be run.
 " - See below:
-"   s:init_vim_async_map_timeout()
+"   s:InitializeTimeout()
 "
 " Latest keypress time if Python not available, used to detect timeout.
 " - We'll maintain either `py3 last_keypress_time_py3` or this value.
@@ -346,7 +346,7 @@ function! s:ReadTimer() abort
 endfunction
 
 " On load, set initial timer value.
-function! s:init_vim_async_map_timeout() abort
+function! s:InitializeTimeout() abort
   if g:vim_async_map_timeout == 0
     if s:haspy3
       let g:vim_async_map_timeout = 100
@@ -376,7 +376,7 @@ if !exists("g:vim_async_map_timeout")
   let g:vim_async_map_timeout = 0
 endif
 
-call s:init_vim_async_map_timeout()
+call s:InitializeTimeout()
 
 " Load Python modules, which stay loaded.
 if s:haspy3
