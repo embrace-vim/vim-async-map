@@ -66,7 +66,7 @@ let s:last_keypress_time_vim = 0
 "   within the timeout time between keypresses to run map_command.
 " - map_command: Command to run when the key sequence is detected.
 
-function! s:register_mapping(map_mode, key_sequence, map_command, timeout) abort
+function! s:RegisterMapping(map_mode, key_sequence, map_command, timeout) abort
   if !s:must_verify_map_mode(a:map_mode) | return | endif
 
   " Convert string into single-character List.
@@ -103,11 +103,11 @@ function! s:register_mapping(map_mode, key_sequence, map_command, timeout) abort
 endfunction
 
 function! embrace#async_map#register_insert_mode_map(key_sequence, map_command, timeout = 0) abort
-  call s:register_mapping("i", a:key_sequence, a:map_command, a:timeout)
+  call s:RegisterMapping("i", a:key_sequence, a:map_command, a:timeout)
 endfunction
 
 function! embrace#async_map#register_normal_mode_map(key_sequence, map_command, timeout = 0) abort
-  call s:register_mapping("n", a:key_sequence, a:map_command, a:timeout)
+  call s:RegisterMapping("n", a:key_sequence, a:map_command, a:timeout)
 endfunction
 
 function! s:must_verify_map_mode(map_mode) abort
