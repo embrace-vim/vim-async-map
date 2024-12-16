@@ -99,7 +99,7 @@ function! s:RegisterMapping(map_mode, key_sequence, map_command, timeout) abort
   " Reset list of active sequences, so next character typed is checked
   " against all sequences.
   let force_reset = 1
-  call s:reset_active_maps("i", force_reset)
+  call s:ResetActiveMaps("i", force_reset)
 endfunction
 
 function! embrace#async_map#register_insert_mode_map(key_sequence, map_command, timeout = 0) abort
@@ -122,7 +122,7 @@ endfunction
 
 " ***
 
-function! s:reset_active_maps(map_mode, force_reset = 0) abort
+function! s:ResetActiveMaps(map_mode, force_reset = 0) abort
   if !s:MustVerifyMapMode(a:map_mode) | return | endif
 
   if !s:is_reducing[a:map_mode] && !a:force_reset
@@ -199,7 +199,7 @@ function! s:process_keypress(map_mode, char) abort
 
   if !empty(completed)
     " After this character, next keypress could start a new sequence.
-    call s:reset_active_maps(a:map_mode)
+    call s:ResetActiveMaps(a:map_mode)
 
     if completed["map_mode"] == "n"
       let seq = completed["map_command"]
@@ -284,7 +284,7 @@ function! s:process_keypress(map_mode, char) abort
 
   if empty(reduction)
     " Nothing matched. Do over, man.
-    call s:reset_active_maps(a:map_mode)
+    call s:ResetActiveMaps(a:map_mode)
   else
     " At least one character matched the start of a sequence, of the
     " next character in a sequence, but none of the sequences has
@@ -421,7 +421,7 @@ function! s:process_InsertCharPre() abort
 
   " User pressed some other key than what's part of any sequence,
   " so reset seq. tracking.
-  call s:reset_active_maps(map_mode)
+  call s:ResetActiveMaps(map_mode)
 endfunction
 
 " ***
@@ -433,7 +433,7 @@ augroup vim_async_map_augroup
 
   " REFER: exists('##event') checks autocommand supported by user's Vim.
   if exists('##ModeChanged')
-    autocmd ModeChanged *:[ni] call s:reset_active_maps(v:event["new_mode"])
+    autocmd ModeChanged *:[ni] call s:ResetActiveMaps(v:event["new_mode"])
   endif
 augroup END
 
