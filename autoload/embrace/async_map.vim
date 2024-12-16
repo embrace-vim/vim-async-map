@@ -394,7 +394,7 @@ endif
 " In addition to the single-character maps, watch InsertCharPre. If the
 " user presses any other key that's *not* registered, reset the watch.
 " - This prevents, e.g., user typing `juke` and plugin matching `jk`.
-" - Note that process_InsertCharPre runs *after* s:ProcessKeypress(),
+" - Note that s:Process_InsertCharPre() runs *after* s:ProcessKeypress(),
 "   and rather than look at v:char, we can check s:is_reducing to
 "   see if s:ProcessKeypress() is in the middle of processing a
 "   sequence or not (and if not, we'll reset the sequence trackers).
@@ -411,7 +411,7 @@ endif
 "     msec. between the `k` and the `j`. So it seems like 100 msec.
 "     is sorta the ideal timeout, at least for normal mode `kj`/`jk`
 "     sequence.)
-function! s:process_InsertCharPre() abort
+function! s:Process_InsertCharPre() abort
   let map_mode = 'i'
   if s:is_reducing[map_mode]
     " The pressed key matched a sequence we're monitoring, and
@@ -430,7 +430,7 @@ endfunction
 augroup vim_async_map_augroup
   au!
 
-  au InsertCharPre * call s:process_InsertCharPre()
+  au InsertCharPre * call s:Process_InsertCharPre()
 
   " REFER: exists('##event') checks autocommand supported by user's Vim.
   if exists('##ModeChanged')
