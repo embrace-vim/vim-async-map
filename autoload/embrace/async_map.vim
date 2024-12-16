@@ -161,7 +161,7 @@ function! s:ProcessKeypress(map_mode, char) abort
   " ***
 
   " We'll check if time between sequence keypresses is greater than timeout.
-  let elapsed_time = s:async_map_read_timer()
+  let elapsed_time = s:ReadTimer()
 
   " Reset the timer.
   call s:ResetTimer()
@@ -333,7 +333,7 @@ function! s:ResetTimer() abort
   let s:last_keypress_time_vim = localtime()
 endfunction
 
-function! s:async_map_read_timer() abort
+function! s:ReadTimer() abort
   if s:haspy3
     py3 vim.command("let pyresult = %g" % (1000 * (default_timer() - last_keypress_time_py3)))
 
