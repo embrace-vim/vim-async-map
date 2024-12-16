@@ -1,4 +1,4 @@
-# Asynchronous, non-blocking insert mode maps
+# Asynchronous, non-blocking insert mode maps જ⁀➴
 
 Use `vim-async-map` to add non-blocking insert mode maps
 using "regular" characters.
