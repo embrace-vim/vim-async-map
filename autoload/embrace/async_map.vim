@@ -164,7 +164,7 @@ function! s:ProcessKeypress(map_mode, char) abort
   let elapsed_time = s:async_map_read_timer()
 
   " Reset the timer.
-  call s:async_map_set_timer()
+  call s:ResetTimer()
 
   " ***
 
@@ -325,7 +325,7 @@ endfunction
 
 " ***
 
-function! s:async_map_set_timer() abort
+function! s:ResetTimer() abort
   if s:haspy3
     py3 last_keypress_time_py3 = default_timer()
   endif
@@ -384,7 +384,7 @@ if s:haspy3
   py3 import vim
   " Initialize timer value, which is used to verify map sequences.
   " - This value is updated by s:ProcessKeypress().
-  call s:async_map_set_timer()
+  call s:ResetTimer()
 else
   let s:last_keypress_time_vim = localtime()
 endif
