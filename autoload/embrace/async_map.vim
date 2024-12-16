@@ -67,7 +67,7 @@ let s:last_keypress_time_vim = 0
 " - map_command: Command to run when the key sequence is detected.
 
 function! s:RegisterMapping(map_mode, key_sequence, map_command, timeout) abort
-  if !s:must_verify_map_mode(a:map_mode) | return | endif
+  if !s:MustVerifyMapMode(a:map_mode) | return | endif
 
   " Convert string into single-character List.
   let key_list = split(a:key_sequence, '.\{1}\zs')
@@ -110,7 +110,7 @@ function! embrace#async_map#register_normal_mode_map(key_sequence, map_command, 
   call s:RegisterMapping("n", a:key_sequence, a:map_command, a:timeout)
 endfunction
 
-function! s:must_verify_map_mode(map_mode) abort
+function! s:MustVerifyMapMode(map_mode) abort
   if index(["i", "n"], a:map_mode) < 0
     echomsg "GAFFE: embrace#async_map: Please specify map_mode 'i' or 'n'"
 
@@ -123,7 +123,7 @@ endfunction
 " ***
 
 function! s:reset_active_maps(map_mode, force_reset = 0) abort
-  if !s:must_verify_map_mode(a:map_mode) | return | endif
+  if !s:MustVerifyMapMode(a:map_mode) | return | endif
 
   if !s:is_reducing[a:map_mode] && !a:force_reset
     " Already reset.
