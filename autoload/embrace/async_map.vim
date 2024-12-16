@@ -354,13 +354,13 @@ function! s:InitializeTimeout() abort
       let g:vim_async_map_timeout = 2000
     endif
   elseif !s:haspy3 && g:vim_async_map_timeout < 2000
-    call s:print_alert_python3_missing()
+    call s:PrintAlertPython3Missing()
 
     let g:vim_async_map_timeout = 2000
   endif
 endfunction
 
-function! s:print_alert_python3_missing() abort
+function! s:PrintAlertPython3Missing() abort
   echomsg "ALERT: Python v3 required to set g:vim_async_map_timeout < 2000"
 
   if has('macunix')
