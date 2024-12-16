@@ -112,8 +112,8 @@ The most common use case is to replace `vim-easyescape`: >
 
   let timeout_msec = 100
 
-  call g:embrace#async_map#register_insert_mode_map("kj", "\<ESC>", timeout_msec)
-  call g:embrace#async_map#register_insert_mode_map("jk", "\<ESC>", timeout_msec)
+  call g:embrace#async_map#RegisterInsertModeMap("kj", "\<ESC>", timeout_msec)
+  call g:embrace#async_map#RegisterInsertModeMap("jk", "\<ESC>", timeout_msec)
 <
 If you also wanted |kj| and |jk| to work from command mode,
 you could add two simple maps: >
@@ -169,7 +169,7 @@ the normal mode command of the same name, e.g., >
   let timeout_msec = 100
 
   " Wire the `gf` key sequence to the `gf` command.
-  call g:embrace#async_map#register_insert_mode_map("gf", "gf", timeout_msec)
+  call g:embrace#async_map#RegisterInsertModeMap("gf", "gf", timeout_msec)
 <
 You could similarly add a visual mode mapping: >
 
@@ -200,7 +200,7 @@ may need a longer timeout for other maps.
 
   let timeout_msec = 200
 
-  call g:embrace#async_map#register_insert_mode_map("gW", "gW", timeout_msec)
+  call g:embrace#async_map#RegisterInsertModeMap("gW", "gW", timeout_msec)
 <
 
 ==============================================================================

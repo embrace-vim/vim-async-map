@@ -103,7 +103,7 @@ function! s:RegisterMapping(map_mode, key_sequence, map_command, timeout) abort
   call s:ResetActiveMaps("i", force_reset)
 endfunction
 
-function! embrace#async_map#register_insert_mode_map(key_sequence, map_command, timeout = 0) abort
+function! embrace#async_map#RegisterInsertModeMap(key_sequence, map_command, timeout = 0) abort
   call s:RegisterMapping("i", a:key_sequence, a:map_command, a:timeout)
 endfunction
 
