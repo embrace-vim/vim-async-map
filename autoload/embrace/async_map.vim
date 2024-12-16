@@ -89,7 +89,8 @@ function! s:RegisterMapping(map_mode, key_sequence, map_command, timeout) abort
   let map_chars_registered = s:map_chars_registered[a:map_mode]
   for key in key_list
     if index(map_chars_registered, key) < 0
-      exec a:map_mode .. "noremap <expr> " .. key .. " <SID>process_keypress("
+      " SAVVY: Note that s:ProcessKeypress doesn't work; use <SID> instead.
+      exec a:map_mode .. "noremap <expr> " .. key .. " <SID>ProcessKeypress("
         \ .. "\"" .. a:map_mode .. "\", \"" .. key .. "\")"
 
       call add(map_chars_registered, key)
@@ -151,7 +152,7 @@ endfunction
 " USAGE: Use b:vim_async_map_disable to disable based on filetype, e.g.,
 "
 "   autocmd FileType text,markdown call setbufvar(bufnr("%"), 'easyescape_disable', 1)
-function! s:process_keypress(map_mode, char) abort
+function! s:ProcessKeypress(map_mode, char) abort
   if exists("b:vim_async_map_disable") && b:vim_async_map_disable == 1
 
     return a:char
@@ -316,7 +317,7 @@ function! VimInsertModeMapVerifyUndoAndRunCommand(timer_id) abort
 
   " Note calling <ESC> here doesn't work, i.e.:
   "   exe "normal! \e"
-  " - So <Escape> was previously returned by the process_keypress map.
+  " - So <Escape> was previously returned by s:ProcessKeypress().
   if s:completed["map_command"] != "\<ESC>"
     exe "normal " .. s:completed["map_command"]
   endif
@@ -382,7 +383,7 @@ if s:haspy3
   py3 from timeit import default_timer
   py3 import vim
   " Initialize timer value, which is used to verify map sequences.
-  " - This value is updated by process_keypress.
+  " - This value is updated by s:ProcessKeypress().
   call s:async_map_set_timer()
 else
   let s:last_keypress_time_vim = localtime()
@@ -393,10 +394,10 @@ endif
 " In addition to the single-character maps, watch InsertCharPre. If the
 " user presses any other key that's *not* registered, reset the watch.
 " - This prevents, e.g., user typing `juke` and plugin matching `jk`.
-" - Note that process_InsertCharPre runs *after* process_keypress,
+" - Note that process_InsertCharPre runs *after* s:ProcessKeypress(),
 "   and rather than look at v:char, we can check s:is_reducing to
-"   see if process_keypress is in the middle of processing a sequence
-"   or not (and if not, we'll reset the sequence trackers).
+"   see if s:ProcessKeypress() is in the middle of processing a
+"   sequence or not (and if not, we'll reset the sequence trackers).
 "
 " BWARE: There's no equivalent for watching normal mode keypresses (as
 " far as the author knows), so user could still see false-positives.
@@ -414,7 +415,7 @@ function! s:process_InsertCharPre() abort
   let map_mode = 'i'
   if s:is_reducing[map_mode]
     " The pressed key matched a sequence we're monitoring, and
-    " process_keypress just handled it (and set is_reducing=1).
+    " s:ProcessKeypress() just handled it (and set is_reducing=1).
 
     return
   endif
