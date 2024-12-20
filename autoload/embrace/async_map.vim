@@ -386,6 +386,10 @@ if s:haspy3
   " - This value is updated by s:ProcessKeypress().
   call s:ResetTimer()
 else
+  " MAYBE/2024-12-20: Try timer_start instead — that has better granularity,
+  " and we could use it to set a flag (so when next keypress received, we
+  " check if timer fired or not. If it fired, timeout happened and we reset
+  " the sequences; otherwise cancel the timer and check next seq. char.).
   let s:last_keypress_time_vim = localtime()
 endif
 
