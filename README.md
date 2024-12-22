@@ -252,148 +252,32 @@ Hints:
 
 ## Installation
 
-Installation is easy using the packages feature (see
-[`:help packages`](https://vimhelp.org/repeat.txt.html#packages)).
+Take advantage of Vim's packages feature
+([`:h packages`](https://vimhelp.org/repeat.txt.html#packages))
+and install under `~/.vim/pack`, e.g.,:
 
-To install the package so that it will automatically load on Vim startup,
-use a `start` directory, e.g.,
-
-  ```
+  ```shell
   mkdir -p ~/.vim/pack/embrace-vim/start
   cd ~/.vim/pack/embrace-vim/start
+  git clone https://github.com/embrace-vim/vim-source-reloader.git
+
+  " Build help tags
+  vim -u NONE -c "helptags vim-source-reloader/doc" -c q
   ```
 
-If you want to test the package first, make it optional instead
-(see [`:help pack-add`](https://vimhelp.org/repeat.txt.html#pack-add)):
+- Alternatively, install under `~/.vim/pack/embrace-vim/opt` and call
+  `:packadd vim-source-reloader` to load the plugin on-demand.
 
-  ```
-  mkdir -p ~/.vim/pack/embrace-vim/opt
-  cd ~/.vim/pack/embrace-vim/opt
-  ```
-
-Clone the project to the desired path:
-
-  ```
-  git clone https://github.com/embrace-vim/vim-async-map.git
-  ```
-
-If you installed to the optional path, tell Vim to load the package:
-
-  ```
-  :packadd! vim-async-map
-  ```
-
-Just once, tell Vim to build the online help:
-
-  ```
-  :Helptags
-  ```
-
-Then whenever you want to reference the help from Vim, run:
-
-  ```
-  :help vim-async-map
-  ```
-
-[vim-plug]: https://github.com/junegunn/vim-plug
-[Vundle]: https://github.com/VundleVim/Vundle.vim
-[myrepos]: https://myrepos.branchable.com/
-[ohmyrepos]: https://github.com/landonb/ohmyrepos
-
-Note that you'll need to update the repo manually (e.g., `git pull`
-occasionally).
-
-- If you'd like to be able to update from within Vim, you could use
-  [`vim-plug`][vim-plug].
-
-  - You could then skip the steps above and register
-    the plugin like this, e.g.:
-
-  ```
-  call plug#begin()
-
-  " List your plugins here
-  Plug 'embrace-vim/vim-async-map'
-
-  call plug#end()
-  ```
-
-- And to update, call:
-
-  ```
-  :PlugUpdate
-  ```
-
-- Similarly, there's also [`Vundle`][Vundle].
-
-  - You'd configure it something like this:
-
-  ```
-  set nocompatible              " be iMproved, required
-  filetype off                  " required
-
-  " set the runtime path to include Vundle and initialize
-  set rtp+=~/.vim/bundle/Vundle.vim
-  call vundle#begin()
-  " alternatively, pass a path where Vundle should install plugins
-  "call vundle#begin('~/some/path/here')
-
-  " let Vundle manage Vundle, required
-  Plugin 'VundleVim/Vundle.vim'
-
-  Plugin 'embrace-vim/vim-async-map'
-
-  " All of your Plugins must be added before the following line
-  call vundle#end()            " required
-  filetype plugin indent on    " required
-  " To ignore plugin indent changes, instead use:
-  "filetype plugin on
-  ```
-
-- And then to update, call one of these:
-
-  ```
-  :PluginInstall!
-  :PluginUpdate
-  ```
-
-- Or, if you're like the author, you could use a multi-repo Git tool,
-  such as [`myrepos`][myrepos] (along with the author's library, [`ohmyrepos`][ohmyrepos])).
-
-  - With [`myrepos`][myrepos], you could update all your Git repos with
-    the following command:
-
-  ```
-  mr -d / pull
-  ```
-
-- Alternatively, if you use [`ohmyrepos`][ohmyrepos], you could pull
-  just Vim plugin changes with something like this:
-
-  ```
-  MR_INCLUDE=vim-plugins mr -d / pull
-  ```
-
-- After you identify your vim-plugins using the 'skip' action, e.g.:
-
-  ```
-  # Put this in ~/.mrconfig, or something loaded by it.
-  [DEFAULT]
-  skip = mr_exclusive "vim-plugins"
-
-  [pack/embrace-vim/start/vim-async-map]
-  lib = remote_set origin https://github.com/embrace-vim/vim-async-map.git
-
-  [DEFAULT]
-  skip = false
-  ```
+For more installation tips — including how to easily keep the
+plugin up-to-date — please see [`INSTALL.md`](INSTALL.md).
 
 ## Attribution
 
-The [`embrace-vim`](https://github.com/embrace-vim) logo by
-[`@landonb`](https://github.com/landonb) contains
-[*coffee cup with straw by farra nugraha from Noun Project*](https://thenounproject.com/icon/coffee-cup-with-straw-6961731/)
-(CC BY 3.0).
+The [`embrace-vim`][embrace-vim] logo by [`@landonb`][@landonb] contains
+[coffee cup with straw by farra nugraha from Noun Project](https://thenounproject.com/icon/coffee-cup-with-straw-6961731/) (CC BY 3.0).
+
+[embrace-vim]: https://github.com/embrace-vim
+[@landonb]: https://github.com/landonb
 
 ## Very Special Thanks
 
