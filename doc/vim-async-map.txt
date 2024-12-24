@@ -1,4 +1,4 @@
-*vim-async-map.txt*	Distraction-free insert maps.	2024 Dec 09
+*vim-async-map.txt*	Distraction-free insert maps	2024 Dec 09
 
 VIM ASYNC MAP જ⁀➴ Add non-blocking insert mode maps~
 
