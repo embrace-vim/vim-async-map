@@ -1,8 +1,8 @@
 " vim:tw=0:ts=2:sw=2:et:norl:
 " Author: Landon Bouma <https://tallybark.com/>
 " Project: https://github.com/embrace-vim/vim-async-map#જ⁀➴
-" Summary: vim-easyescape fork avoids edits, supports arbitrary commands
 " License: MIT | Copyright © 2024 Landon Bouma, © 2017 Yichao Zhou
+" Summary: vim-easyescape fork avoids edits, supports arbitrary commands
 
 " -------------------------------------------------------------------
 
