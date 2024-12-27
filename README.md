@@ -250,6 +250,14 @@ Hints:
 
     https://github.com/DepoXy/depoxy/blob/1.4.0/home/.vim/_mrconfig#L53-L108
 
+## Similar Projects
+
+- The original [`zhou13/vim-easyescape`](https://github.com/zhou13/vim-easyescape)
+  — "vim-easyescape makes exiting insert mode easy and distraction free!"
+
+- [`hyhugh/vim-easyescape-plus`](https://github.com/hyhugh/vim-easyescape-plus)
+  — "A more useable(for me) version of vim-easyescape"
+
 ## Installation
 
 Take advantage of Vim's packages feature
