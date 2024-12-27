@@ -259,14 +259,14 @@ and install under `~/.vim/pack`, e.g.,:
   ```shell
   mkdir -p ~/.vim/pack/embrace-vim/start
   cd ~/.vim/pack/embrace-vim/start
-  git clone https://github.com/embrace-vim/vim-source-reloader.git
+  git clone https://github.com/embrace-vim/vim-async-map.git
 
   " Build help tags
-  vim -u NONE -c "helptags vim-source-reloader/doc" -c q
+  vim -u NONE -c "helptags vim-async-map/doc" -c q
   ```
 
 - Alternatively, install under `~/.vim/pack/embrace-vim/opt` and call
-  `:packadd vim-source-reloader` to load the plugin on-demand.
+  `:packadd vim-async-map` to load the plugin on-demand.
 
 For more installation tips — including how to easily keep the
 plugin up-to-date — please see [`INSTALL.md`](INSTALL.md).
