@@ -288,7 +288,7 @@ That plugin offered a novel approach to adding insert mode mappings,
 one that I've used for many years, and it was only because I like it
 so much that I hacked away hoping to improve upon it.
 
-So with gratitude and admiration, thanks you,
+So with gratitude and admiration, thank you,
 ```
 _____                  _____                          
  | ____|__ _ ___ _   _  | ____|___  ___ __ _ _ __   ___ 
